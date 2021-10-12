@@ -1,0 +1,12 @@
+# Project exclude paths
+/out/
+/target/
+/src/main/java/org/infotoast/terrainsystemv/biome/beach/*
+/src/main/java/org/infotoast/terrainsystemv/biome/deepoceanic/*
+/src/main/java/org/infotoast/terrainsystemv/biome/flat/*
+/src/main/java/org/infotoast/terrainsystemv/biome/mountainous/*
+/src/main/java/org/infotoast/terrainsystemv/biome/oceanic/*
+/src/main/java/org/infotoast/terrainsystemv/biome/rivers/*
+/src/main/java/org/infotoast/terrainsystemv/customobject/objects/*
+/src/main/java/org/infotoast/terrainsystemv/structure
+/.idea

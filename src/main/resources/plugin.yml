@@ -1,0 +1,7 @@
+main: org.infotoast.terrainsystemv.TerrainSystemV
+name: TerrainSystemV
+version: 1.5
+load: Startup
+author: Frank
+website: infotoast.org
+api-version: 1.17
