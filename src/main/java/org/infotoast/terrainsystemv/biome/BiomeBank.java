@@ -75,7 +75,7 @@ public enum BiomeBank {
     // River
     EXAMPLE_BIOME_RIVER(new ExampleBiomeHandler(), BiomeType.RIVER),
     // Deep Ocean
-    EXAMPLE_BIOME_DEEP_OCEAN(new ExampleBiomeHandler(), BiomeType.DEEP_OCEANIC),
+    DEEP_EXAMPLE_BIOME_OCEANIC(new ExampleBiomeHandler(), BiomeType.DEEP_OCEANIC),
     // Flat
     EXAMPLE_BIOME_FLAT(new ExampleBiomeHandler(), BiomeType.FLAT),
     // Beaches

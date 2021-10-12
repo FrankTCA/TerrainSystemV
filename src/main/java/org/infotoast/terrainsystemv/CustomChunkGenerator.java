@@ -75,6 +75,8 @@ public class CustomChunkGenerator extends ChunkGenerator {
 
     public static final int seaLevel = 61;
 
+    public static final Object LOCK = new Object();
+
     public static ArrayList<Vector2> chunksToErode = new ArrayList<>();
 
     private static final LoadingCache<ChunkCache, ChunkCache> CHUNK_CACHE = CacheBuilder.newBuilder().maximumSize(1000).build(new ChunkCacheLoader());
@@ -239,14 +241,10 @@ public class CustomChunkGenerator extends ChunkGenerator {
         return new BiomeProviderOverride();
     }
 
-    /*
-    * In ye olden days, before Spigot changed everything, this method would ensure that all blocks are being set
-    * in a synchronous manner.
-    * We no longer have to worry about that anymore, but we kept the function
-    * just because it would be useless to get rid of.
-     */
     private void setBlockSync(ChunkData data, int x, int y, int z, Material material) {
-        data.setBlock(x, y, z, material);
+        synchronized (LOCK) {
+            data.setBlock(x, y, z, material);
+        }
     }
 
     public static ChunkCache getCache(WorldImproved world, int x, int z) {

@@ -2,13 +2,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>groupId</groupId>
-  <artifactId>TestGenerator3</artifactId>
+  <artifactId>TerrainSystemV</artifactId>
   <version>1.0-SNAPSHOT</version>
   <build>
     <plugins>
       <plugin>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.2.1</version>
+        <version>3.3.0-SNAPSHOT</version>
         <executions>
           <execution>
             <id>shade</id>
@@ -22,19 +22,20 @@
           <relocations>
             <relocation>
               <pattern>de.tr7zw.changeme.nbtapi</pattern>
-              <shadedPattern>de.tr7zw.toastgenerator.nbtapi</shadedPattern>
+              <shadedPattern>de.tr7zw.terrainsystemv.nbtapi</shadedPattern>
             </relocation>
           </relocations>
         </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
+        <version>3.2.0</version>
         <configuration>
           <archive>
             <manifest>
               <addClasspath>true</addClasspath>
               <classpathPrefix>lib/</classpathPrefix>
-              <mainClass>add your main class</mainClass>
+              <mainClass>org.infotoast.terrainsystemv.TerrainSystemV</mainClass>
             </manifest>
           </archive>
         </configuration>
@@ -50,7 +51,22 @@
       <id>spigot-repo</id>
       <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
     </repository>
+    <repository>
+      <id>maven-snapshots</id>
+      <url>https://repository.apache.org/content/repositories/snapshots/</url>
+    </repository>
   </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <releases>
+        <updatePolicy>never</updatePolicy>
+      </releases>
+      <snapshots />
+      <id>central</id>
+      <name>Maven Plugin Repository</name>
+      <url>http://repo1.maven.org/maven2</url>
+    </pluginRepository>
+  </pluginRepositories>
   <dependencies>
     <dependency>
       <groupId>org.spigotmc</groupId>
@@ -60,7 +76,7 @@
     </dependency>
   </dependencies>
   <properties>
-    <maven.compiler.target>11</maven.compiler.target>
-    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>16</maven.compiler.target>
+    <maven.compiler.source>16</maven.compiler.source>
   </properties>
 </project>

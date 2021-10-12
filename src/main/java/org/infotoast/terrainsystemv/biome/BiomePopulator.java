@@ -67,10 +67,7 @@ public class BiomePopulator extends BlockPopulator {
     * This is the class that gets called and runs the populateLargeItems function in each biome.
      */
     @Override
-    public void populate(WorldInfo worldinfo, Random random, int chunkX, int chunkZ, LimitedRegion limitedRegion) {
-        WorldImproved worldi = WorldImproved.get(worldinfo);
-        World world = worldi.getWorld();
-        Chunk chunk = world.getChunkAt(chunkX, chunkZ);
+    public void populate(World world, Random random, Chunk chunk) {
         int rawX;
         int rawZ;
         List<Biome> biomesToTransform = new ArrayList<>();

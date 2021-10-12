@@ -125,10 +125,7 @@ public class OrePopulator extends BlockPopulator {
         }
     }
 
-    public void populate(WorldInfo worldinfo, Random random, int chunkX, int chunkZ, LimitedRegion reg) {
-        WorldImproved worldi = WorldImproved.get(worldinfo);
-        World world = worldi.getWorld();
-        Chunk chunk = world.getChunkAt(chunkX, chunkZ);
+    public void populate(World world, Random random, Chunk chunk) {
         placeOreType(world, random, chunk, Material.DIRT, 50, 20, 3, 2, 70, 255);
         placeOreType(world, random, chunk, Material.GRAVEL, 50, 20, 3, 2, 70, 255);
         placeOreType(world, random, chunk, Material.GRANITE, 50, 20, 3, 2, 70, 255);
