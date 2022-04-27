@@ -1,6 +1,7 @@
 package org.infotoast.terrainsystemv.math;
 
 import org.bukkit.Axis;
+import org.bukkit.Material;
 import org.infotoast.terrainsystemv.WorldImproved;
 import org.infotoast.terrainsystemv.biome.BiomeBank;
 

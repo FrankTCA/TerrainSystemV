@@ -132,7 +132,7 @@ public enum HeightMap {
         public double getHeight(WorldImproved world, int x, int z) {
             FastNoise cubic = computeNoise(world, w -> {
                 FastNoise n = new FastNoise((int) world.getSeed() * 7);
-                n.SetNoiseType(FastNoise.NoiseType.Perlin);
+                n.SetNoiseType(FastNoise.NoiseType.CubicFractal);
                 n.SetFractalOctaves(6);
                 n.SetFrequency(0.002f);
                 return n;
@@ -147,7 +147,7 @@ public enum HeightMap {
         public double getHeight(WorldImproved world, int x, int z) {
             FastNoise perlin = computeNoise(world, w -> {
                 FastNoise n = new FastNoise((int) world.getSeed());
-                n.SetNoiseType(FastNoise.NoiseType.CubicFractal);
+                n.SetNoiseType(FastNoise.NoiseType.PerlinFractal);
                 n.SetFractalOctaves(4);
                 n.SetFrequency(0.02f);
                 return n;
@@ -197,10 +197,27 @@ public enum HeightMap {
             height += HeightMap.MOUNTAIN.getHeight(tw, x, z) * (frac);
         }
 
-        if (height > (tw.getWorld().getMaxHeight() * 0.75)) height = (tw.getWorld().getMaxHeight() * 0.75) + (height - (tw.getWorld().getMaxHeight() * 0.75)) * 0.5;
-        if (height > (tw.getWorld().getMaxHeight() * 0.87)) height = (tw.getWorld().getMaxHeight() * 0.87) + (height - (tw.getWorld().getMaxHeight() * 0.87)) * 0.3;
-        if (height > (tw.getWorld().getMaxHeight() * 0.95)) height = (tw.getWorld().getMaxHeight() * 0.95) + (height - (tw.getWorld().getMaxHeight() * 0.95)) * 0.1;
-        if (height > (tw.getWorld().getMaxHeight() * 0.98)) height = (tw.getWorld().getMaxHeight() * 0.98) + (height - (tw.getWorld().getMaxHeight() * 0.98)) * 0.05;
+        /*
+        * Height multipliers
+        * For 1.18.2, the height has been increased,
+        * meaning we can attempt to make mountains etc more drastic
+         */
+        if (80 < height && height <= 100)
+            height = 80 + (height - 80) * 1.2;
+        if (100 < height && height <= 150)
+            height = 100 + (height - 100) * 1.3;
+        if (150 < height && height <= 200)
+            height = 150 + (height - 150) * 1.4;
+        if (200 < height && height <= 275)
+            height = 200 + (height - 200) * 1.5;
+        if (275 < height)
+            height = 275 + (height - 275) * 0.5;
+        if (295 < height)
+            height = 295 + (height - 295) * 0.3;
+        if (305 < height)
+            height = 305 + (height - 305) * 0.1;
+        if (315 < height)
+            height = 315 + (height - 315) * 0.05;
 
         return (height + HeightMap.OCEANIC.getHeight(tw, x, z)) * heightAmplifier;
     }
@@ -225,10 +242,22 @@ public enum HeightMap {
             height += HeightMap.MOUNTAIN.getHeight(world, x, z) * (frac);
         }
 
-        if (height > (world.getWorld().getMaxHeight() * 0.75)) height = (world.getWorld().getMaxHeight() * 0.75) + (height - (world.getWorld().getMaxHeight() * 0.75)) * 0.5;
-        if (height > (world.getWorld().getMaxHeight() * 0.87)) height = (world.getWorld().getMaxHeight() * 0.87) + (height - (world.getWorld().getMaxHeight() * 0.87)) * 0.3;
-        if (height > (world.getWorld().getMaxHeight() * 0.95)) height = (world.getWorld().getMaxHeight() * 0.95) + (height - (world.getWorld().getMaxHeight() * 0.95)) * 0.1;
-        if (height > (world.getWorld().getMaxHeight() * 0.98)) height = (world.getWorld().getMaxHeight() * 0.98) + (height - (world.getWorld().getMaxHeight() * 0.98)) * 0.05;
+        if (80 < height)
+            height = 80 + (height - 80) * 1.2;
+        if (100 < height)
+            height = 100 + (height - 100) * 1.1;
+        if (150 < height)
+            height = 150 + (height - 150) * 1.2;
+        if (200 < height)
+            height = 200 + (height - 200) * 1.2;
+        if (275 < height)
+            height = 275 + (height - 275) * 0.5;
+        if (295 < height)
+            height = 295 + (height - 295) * 0.3;
+        if (305 < height)
+            height = 305 + (height - 305) * 0.1;
+        if (315 < height)
+            height = 315 + (height - 315) * 0.05;
 
         // Oceans
         height += HeightMap.OCEANIC.getHeight(world, x, z);

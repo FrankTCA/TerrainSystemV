@@ -94,12 +94,13 @@ public class CustomChunkGenerator extends ChunkGenerator {
                 int rawZ = chunkZ * 16 + z;
                 WorldImproved worldi = WorldImproved.get(worldInfo);
                 int currentHeight = HeightMap.getBlockHeight(worldi, rawX, rawZ);
+
                 BiomeBank bank = BiomeBank.calculateBiome(worldi, rawX, rawZ, currentHeight);
                 Material[] crust = bank.getHandler().getSurfaceCrust(random);
                 int undergroundHeight = currentHeight - crust.length;
 
                 for (int y = undergroundHeight; y > worldInfo.getMinHeight(); y--) {
-                    setBlockSync(chunk, x, y, z, Material.STONE);
+                    setBlockSync(chunk, x, y, z, Material.STONE, worldInfo, chunkX, chunkZ);
                 }
             }
         }
@@ -121,22 +122,22 @@ public class CustomChunkGenerator extends ChunkGenerator {
                 int rawZ = chunkZ * 16 + z;
                 WorldImproved worldi = WorldImproved.get(world);
                 int currentHeight = HeightMap.getBlockHeight(worldi, rawX, rawZ);
-                BiomeBank bank = BiomeBank.calculateBiome(worldi, rawX, rawZ, currentHeight);
+                BiomeBank bank = worldi.getBiomeBank(chunkX+x, chunkZ+z);
                 Material[] crust = bank.getHandler().getSurfaceCrust(random);
                 int undergroundHeight = currentHeight;
                 int index = 0;
                 while (index < crust.length) {
-                    setBlockSync(chunk, x, undergroundHeight, z, crust[index]);
+                    setBlockSync(chunk, x, undergroundHeight, z, crust[index], world, chunkX, chunkZ);
                     index++;
                     undergroundHeight--;
                 }
                 // Sea level
                 for (int y = currentHeight + 1; y <= seaLevel; y++) {
-                    setBlockSync(chunk, x, y, z, Material.WATER);
+                    setBlockSync(chunk, x, y, z, Material.WATER, world, chunkX, chunkZ);
                 }
 
                 Material top = bank.getHandler().populateSmallItems(random);
-                setBlockSync(chunk, x, currentHeight+1, z, top);
+                setBlockSync(chunk, x, currentHeight+1, z, top, world, chunkX, chunkZ);
                 BiomeHandler transformHandler = bank.getHandler().getTransformHandler();
                 if (transformHandler != null && !biomesToTransform.contains(transformHandler))
                     biomesToTransform.add(transformHandler);
@@ -147,8 +148,8 @@ public class CustomChunkGenerator extends ChunkGenerator {
         for (BiomeHandler handler : biomesToTransform) {
             handler.transformTerrain(world, random, chunk, chunkX, chunkZ);
         }
-        if (willChunkErode)
-            chunksToErode.add(new Vector2(chunkX, chunkZ));
+        //if (willChunkErode)
+            //chunksToErode.add(new Vector2(chunkX, chunkZ));
     }
 
     /*
@@ -241,9 +242,15 @@ public class CustomChunkGenerator extends ChunkGenerator {
         return new BiomeProviderOverride();
     }
 
-    private void setBlockSync(ChunkData data, int x, int y, int z, Material material) {
+    public static void setBlockSync(ChunkData data, int x, int y, int z, Material material, WorldInfo info, int chunkX, int chunkZ) {
         synchronized (LOCK) {
             data.setBlock(x, y, z, material);
+        }
+    }
+
+    public static void setBlockSync(Chunk chunk, int x, int y, int z, Material material) {
+        synchronized (LOCK) {
+            chunk.getBlock(x, y, z).setType(material);
         }
     }
 

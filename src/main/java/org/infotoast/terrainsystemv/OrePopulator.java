@@ -1,8 +1,6 @@
 package org.infotoast.terrainsystemv;
 
-import org.bukkit.Chunk;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.LimitedRegion;
 import org.bukkit.generator.WorldInfo;
@@ -71,72 +69,69 @@ public class OrePopulator extends BlockPopulator {
     * They do not have to be naturally spawning blocks, they can be anything.
      */
 
-    private void placeOreType(World world, Random random, Chunk chunk, Material type, int chance, int maxSize, int maxVeinNum, int minRange, int maxRange, int rareMaxRange) {
-        synchronized (LOCK) {
-            if (chunk.isLoaded()) {
-                int x, y, z;
-                for (int i = 0; i < maxVeinNum; i++) {
-                    if (random.nextInt(100) < chance) {
-                        x = random.nextInt(15);
-                        z = random.nextInt(15);
-                        int rawX = chunk.getX() * 16 + x;
-                        int rawZ = chunk.getZ() * 16 + z;
+    private void placeOreType(Random random, LimitedRegion region, int chunkX, int chunkZ, Material type, int chance, int maxSize, int maxVeinNum, int minRange, int maxRange, int rareMaxRange) {
+        int x, y, z;
+        for (int i = 0; i < maxVeinNum; i++) {
+            if (random.nextInt(100) < chance) {
+                x = random.nextInt(15);
+                z = random.nextInt(15);
+                int rawX = (chunkX << 4) + x;
+                int rawZ = (chunkZ << 4) + z;
 
-                        int range = maxRange;
+                int range = maxRange;
 
-                        if (random.nextInt(50) == 0) range = rareMaxRange;
+                if (random.nextInt(50) == 0) range = rareMaxRange;
 
-                        y = random.nextInt(range - minRange) + minRange;
+                y = random.nextInt(range - minRange) + minRange;
 
-                        for (int s = 0; s < maxSize; s++){
-                            Material t = world.getBlockAt(rawX, y, rawZ).getType();
-                            if (t != Material.STONE) break;
-                            world.getBlockAt(rawX, y, rawZ).setType(type, false);
-                            //if (x < 16 && z < 16) chunk.getBlock(x, y, z).setType(type);
+                for (int s = 0; s < maxSize; s++){
 
-                            switch (random.nextInt(5)) {
-                                case 0:
-                                    x++;
-                                    rawX++;
-                                    break;
-                                case 1:
-                                    y++;
-                                    break;
-                                case 2:
-                                    z++;
-                                    rawZ++;
-                                    break;
-                                case 3:
-                                    x--;
-                                    rawX--;
-                                    break;
-                                case 4:
-                                    y--;
-                                    break;
-                                case 5:
-                                    z--;
-                                    rawZ--;
-                                    break;
-                            }
-                        }
+                    Material t = region.getType(rawX, y, rawZ);
+                    if (t != Material.STONE) break;
+                    region.setType(rawX, y, rawZ, type);
+
+                    switch (random.nextInt(5)) {
+                        case 0:
+                            x++;
+                            rawX++;
+                            break;
+                        case 1:
+                            y++;
+                            break;
+                        case 2:
+                            z++;
+                            rawZ++;
+                            break;
+                        case 3:
+                            x--;
+                            rawX--;
+                            break;
+                        case 4:
+                            y--;
+                            break;
+                        case 5:
+                            z--;
+                            rawZ--;
+                            break;
                     }
                 }
             }
         }
     }
 
-    public void populate(World world, Random random, Chunk chunk) {
-        placeOreType(world, random, chunk, Material.DIRT, 50, 20, 3, 2, 70, 255);
-        placeOreType(world, random, chunk, Material.GRAVEL, 50, 20, 3, 2, 70, 255);
-        placeOreType(world, random, chunk, Material.GRANITE, 50, 20, 3, 2, 70, 255);
-        placeOreType(world, random, chunk, Material.DIORITE, 50, 20, 3, 2, 70, 255);
-        placeOreType(world, random, chunk, Material.ANDESITE, 50, 20, 3, 2, 70, 255);
-        placeOreType(world, random, chunk, Material.COAL_ORE, 50, 20, 7, 16, 70, 255);
-        placeOreType(world, random, chunk, Material.IRON_ORE, 40, 15, 5, 2, 51, 60);
-        placeOreType(world, random, chunk, Material.GOLD_ORE, 30, 10, 5, 2, 30, 50);
-        placeOreType(world, random, chunk, Material.REDSTONE_ORE, 30, 8, 5, 2, 15, 30);
-        placeOreType(world, random, chunk, Material.LAPIS_ORE, 30, 5, 3, 2, 30, 50);
-        placeOreType(world, random, chunk, Material.DIAMOND_ORE, 100, 8, 1, 2, 15, 30);
+
+    public void populate(WorldInfo worldInfo, Random random, int x, int z, LimitedRegion region) {
+        placeOreType(random, region, x, z, Material.DIRT, 50, 20, 3, 2, 70, 255);
+        placeOreType(random, region, x, z, Material.GRAVEL, 50, 20, 3, 2, 70, 255);
+        placeOreType(random, region, x, z, Material.GRANITE, 50, 20, 3, 2, 70, 255);
+        placeOreType(random, region, x, z, Material.DIORITE, 50, 20, 3, 2, 70, 255);
+        placeOreType(random, region, x, z, Material.ANDESITE, 50, 20, 3, 2, 70, 255);
+        placeOreType(random, region, x, z, Material.COAL_ORE, 50, 20, 7, 16, 70, 255);
+        placeOreType(random, region, x, z, Material.IRON_ORE, 40, 15, 5, 2, 51, 60);
+        placeOreType(random, region, x, z, Material.GOLD_ORE, 30, 10, 5, 2, 30, 50);
+        placeOreType(random, region, x, z, Material.REDSTONE_ORE, 30, 8, 5, 2, 15, 30);
+        placeOreType(random, region, x, z, Material.LAPIS_ORE, 30, 5, 3, 2, 30, 50);
+        placeOreType(random, region, x, z, Material.DIAMOND_ORE, 100, 8, 1, 2, 15, 30);
     }
 }
 
